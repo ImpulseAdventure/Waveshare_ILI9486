@@ -42,6 +42,11 @@
 #define TP_BUSY 6
 #define GET_TP_BUSY    digitalRead(TP_BUSY)
 
+//SD
+#define SD_CS 5
+#define SD_CS_0   digitalWrite(LCD_CS, LOW)
+#define SD_CS_1    digitalWrite(LCD_CS, HIGH)
+
 #define SPI4W_Write_Byte(__DATA) SPI.transfer(__DATA)
 #define SPI4W_Read_Byte(__DATA) SPI.transfer(__DATA)
 /*------------------------------------------------------------------------------------------------------*/
