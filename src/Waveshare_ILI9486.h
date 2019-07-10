@@ -19,7 +19,7 @@
 #define __LCD_GUI_H
 
 #include "LCD_Driver.h"
-#include "fonts.h"
+#include "Fonts/fonts.h"
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 

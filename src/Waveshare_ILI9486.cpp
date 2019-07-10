@@ -13,7 +13,7 @@
   | Info        :   Basic version
 
 ******************************************************************************/
-#include "LCD_GUI.h"
+#include "Waveshare_ILI9486.h"
 #include "Debug.h"
 
 extern LCD_DIS sLCD_DIS;

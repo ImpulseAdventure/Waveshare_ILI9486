@@ -1,6 +1,6 @@
 #include "DEV_Config.h"
 #include "LCD_Driver.h"
-#include "LCD_GUI.h"
+#include "Waveshare_ILI9486.h"
 #include "LCD_Touch.h"
 
 void setup()
