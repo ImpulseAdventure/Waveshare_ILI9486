@@ -36,7 +36,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "fonts.h"
+#include "Fonts/fonts.h"
 #include <avr/pgmspace.h>
 
 const uint8_t Font24_Table [] PROGMEM = 
