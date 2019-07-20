@@ -7,6 +7,9 @@ This is an Arduino library for the Waveshare ILI9486 SPI touch shield displays.
 The driver from official Waveshare touch shield demo code has been extracted and repackaged as an Arduino
 library to make it easier for users to install and reuse in their projects.
 
+A GFX-style wrapper has been added (Waveshare_ILI9486_GFX) to provide some additional compatibility.
+Note that only a minimal subset of the APIs have been incorporated at this time.
+
 ## References
 
 Wiki support pages:
@@ -14,14 +17,16 @@ Wiki support pages:
 - [Waveshare 3.5inch TFT Touch Shield Wiki](https://www.waveshare.com/wiki/3.5inch_TFT_Touch_Shield)
 
 Original demo code examples:
+- The `/original` folder contains the Waveshare official demo driver code.
 - [4inch_TFT_Touch_Shield_Code.7z](https://www.waveshare.com/wiki/File:4inch_TFT_Touch_Shield_Code.7z)
 - [3.5inch_TFT_Touch_Shield_Code.7z](https://www.waveshare.com/wiki/File:3.5inch_TFT_Touch_Shield_Code.7z)
 
 ## Authors
 
 * **Waveshare team** - *Original driver code* - [Waveshare](https://www.waveshare.com/)
+* **ImpulseAdventure** - *Arduino library adaptation* - [ImpulseAdventure](https://github.com/ImpulseAdventure/)
 
 ## License
 
-- This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+- This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 - The Waveshare team has requested that their code retain a note indicating that the original code is from Waveshare.
