@@ -111,6 +111,28 @@ private:
 
 };
 
+  // Color definitions
+  #define ILI9486_BLACK       0x0000  ///<   0,   0,   0
+  #define ILI9486_NAVY        0x000F  ///<   0,   0, 123
+  #define ILI9486_DARKGREEN   0x03E0  ///<   0, 125,   0
+  #define ILI9486_DARKCYAN    0x03EF  ///<   0, 125, 123
+  #define ILI9486_MAROON      0x7800  ///< 123,   0,   0
+  #define ILI9486_PURPLE      0x780F  ///< 123,   0, 123
+  #define ILI9486_OLIVE       0x7BE0  ///< 123, 125,   0
+  #define ILI9486_LIGHTGREY   0xC618  ///< 198, 195, 198
+  #define ILI9486_DARKGREY    0x7BEF  ///< 123, 125, 123
+  #define ILI9486_BLUE        0x001F  ///<   0,   0, 255
+  #define ILI9486_GREEN       0x07E0  ///<   0, 255,   0
+  #define ILI9486_CYAN        0x07FF  ///<   0, 255, 255
+  #define ILI9486_RED         0xF800  ///< 255,   0,   0
+  #define ILI9486_MAGENTA     0xF81F  ///< 255,   0, 255
+  #define ILI9486_YELLOW      0xFFE0  ///< 255, 255,   0
+  #define ILI9486_WHITE       0xFFFF  ///< 255, 255, 255
+  #define ILI9486_ORANGE      0xFD20  ///< 255, 165,   0
+  #define ILI9486_GREENYELLOW 0xAFE5  ///< 173, 255,  41
+  #define ILI9486_PINK        0xFC18  ///< 255, 130, 198
+
+
 #endif // _WAVESHARE_ILI9486_GFX_
 
 //
