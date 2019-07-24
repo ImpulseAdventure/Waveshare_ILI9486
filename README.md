@@ -21,6 +21,10 @@ Original demo code examples:
 - [4inch_TFT_Touch_Shield_Code.7z](https://www.waveshare.com/wiki/File:4inch_TFT_Touch_Shield_Code.7z)
 - [3.5inch_TFT_Touch_Shield_Code.7z](https://www.waveshare.com/wiki/File:3.5inch_TFT_Touch_Shield_Code.7z)
 
+## Examples
+- A ported GFX "graphicstest" example using the Waveshare_ILI9486_GFX API can be found in Examples -> ws_graphicstest_
+- Original example driver code is provided in Examples -> 3.5inch and Examples -> 4.0inch
+
 ## Authors
 
 * **Waveshare team** - *Original driver code* - [Waveshare](https://www.waveshare.com/)
@@ -30,3 +34,4 @@ Original demo code examples:
 
 - This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 - The Waveshare team has requested that their code retain a note indicating that the original code is from Waveshare.
+- The Waveshare_ILI9486_GFX file leverages the Adafruit-GFX API, with a BSD license.
