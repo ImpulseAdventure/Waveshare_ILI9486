@@ -1,11 +1,42 @@
 //
 // GFX style API wrapper for Waveshare_ILI9486
+// - https://github.com/ImpulseAdventure/Waveshare_ILI9486
 // - Intended to work with the following displays:
 //   - Waveshare 4.0" Touch Shield for Arduino
 //   - Waveshare 3.5" Touch Shield for Arduino
 //
-// - Referenced API attribution at bottom of file
+
 //
+// The Waveshare_ILI9486_GFX API is based on Adafruit-GFX.
+// The associated copyright notice is reproduced below.
+//
+/*
+This is the core graphics library for all our displays, providing a common
+set of graphics primitives (points, lines, circles, etc.).  It needs to be
+paired with a hardware-specific library for each display device we carry
+(to handle the lower-level functions).
+Adafruit invests time and resources providing this open source code, please
+support Adafruit & open-source hardware by purchasing products from Adafruit!
+Copyright (c) 2013 Adafruit Industries.  All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+- Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+- Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #include "Waveshare_ILI9486.h"
 #include "Waveshare_ILI9486_GFX.h"
@@ -13,9 +44,11 @@
 Waveshare_ILI9486_GFX::Waveshare_ILI9486_GFX(void)
 {
 	// Assign display dimensions
-	// - TODO: Support rotation
-	_width = LCD_WIDTH;
-	_height = LCD_HEIGHT;
+	WIDTH = LCD_WIDTH;
+	HEIGHT = LCD_HEIGHT;
+	_width = WIDTH;
+	_height = HEIGHT;
+	_rotation = 0;
 
 	_cursor_x = 0;
 	_cursor_y = 0;
@@ -212,37 +245,85 @@ void Waveshare_ILI9486_GFX::drawChar(int16_t x, int16_t y, unsigned char c, uint
 	GUI_DisChar(x, y, c, (sFONT*)pFont, bg, color);
 }
 
+void Waveshare_ILI9486_GFX::charBounds(char c, int16_t *x, int16_t *y,
+	int16_t *minx, int16_t *miny, int16_t *maxx, int16_t *maxy)
+{
+	// Handle monospaced font
+
+	int8_t nCharW = 6;
+	int8_t nCharH = 8;
+
+	// If a font has been assigned, fetch the dimensions
+	// from the font record.
+	if (_font != NULL) {
+		nCharW = _font->Width;
+		nCharH = _font->Height;
+	}
+
+	if (c == '\n') {                     // Newline?
+		*x = 0;                        // Reset x to zero,
+		*y += _textsize_y * nCharH;           // advance y one line
+		// min/max x/y unchaged -- that waits for next 'normal' character
+	}
+	else if (c != '\r') {  // Normal char; ignore carriage returns
+		if (_wrap && ((*x + _textsize_x * nCharW) > _width)) { // Off right?
+			*x = 0;                    // Reset x to zero,
+			*y += _textsize_y * nCharH;       // advance y one line
+		}
+		int x2 = *x + _textsize_x * nCharW - 1, // Lower-right pixel of char
+			y2 = *y + _textsize_y * nCharH - 1;
+		if (x2 > *maxx) *maxx = x2;      // Track max x, y
+		if (y2 > *maxy) *maxy = y2;
+		if (*x < *minx) *minx = *x;      // Track min x, y
+		if (*y < *miny) *miny = *y;
+		*x += _textsize_x * nCharW;             // Advance x one char
+	}
+
+}
+
+void Waveshare_ILI9486_GFX::getTextBounds(const char *str, int16_t x, int16_t y,
+	int16_t *x1, int16_t *y1, uint16_t *w, uint16_t *h)
+{
+	uint8_t c; // Current character
+
+	*x1 = x;
+	*y1 = y;
+	*w = *h = 0;
+
+	int16_t minx = _width, miny = _height, maxx = -1, maxy = -1;
+
+	while ((c = *str++))
+		charBounds(c, &x, &y, &minx, &miny, &maxx, &maxy);
+
+	if (maxx >= minx) {
+		*x1 = minx;
+		*w = maxx - minx + 1;
+	}
+	if (maxy >= miny) {
+		*y1 = miny;
+		*h = maxy - miny + 1;
+	}
+}
+
+// Placeholder stub functions - not implemented
+
+void Waveshare_ILI9486_GFX::setRotation(uint8_t r)
+{
+	// NOTE: Rotation functionality not supported in Waveshare lib
+	_rotation = (r & 3);
+	switch (_rotation) {
+	case 0:
+	case 2:
+		_width = LCD_WIDTH;
+		_height = LCD_HEIGHT;
+		break;
+	case 1:
+	case 3:
+		_width = LCD_HEIGHT;
+		_height = LCD_WIDTH;
+		break;
+	}
+}
+
 // ----------------------------------------------------------------------------
 
-//
-// The above API is based on the Adafruit-GFX API
-// The copyright notice associated with the Adafruit-GFX library
-// has been reproduced below.
-//
-/*
-This is the core graphics library for all our displays, providing a common
-set of graphics primitives (points, lines, circles, etc.).  It needs to be
-paired with a hardware-specific library for each display device we carry
-(to handle the lower-level functions).
-Adafruit invests time and resources providing this open source code, please
-support Adafruit & open-source hardware by purchasing products from Adafruit!
-Copyright (c) 2013 Adafruit Industries.  All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-- Redistributions of source code must retain the above copyright notice,
-  this list of conditions and the following disclaimer.
-- Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
- */
