@@ -23,7 +23,10 @@ uint8_t System_Init(void)
   pinMode(TP_IRQ, INPUT);
   digitalWrite(TP_IRQ, HIGH);
 
-  Serial.begin(115200);
+  // NOTE: Reduced serial port baud rate to match
+  //       common default setting. Was 115200 bps.
+  //Serial.begin(115200);
+  Serial.begin(9600);
   
   SPI.setDataMode(SPI_MODE0);
   SPI.setBitOrder(MSBFIRST);
