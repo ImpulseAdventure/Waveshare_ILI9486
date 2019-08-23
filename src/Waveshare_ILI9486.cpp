@@ -1,14 +1,14 @@
 /*****************************************************************************
-  | File      	:	LCD_GUI.c
+  | File        :   LCD_GUI.c
   | Author      :   Waveshare team
-  | Function    :	Achieve drawing: draw points, lines, boxes, circles and
+  | Function    :   Achieve drawing: draw points, lines, boxes, circles and
                     their size, solid dotted line, solid rectangle hollow
-					rectangle, solid circle hollow circle.
+                    rectangle, solid circle hollow circle.
   | Info        :
     Achieve display characters: Display a single character, string, number
     Achieve time display: adaptive size display time minutes and seconds
   ----------------
-  |	This version:   V1.0
+  | This version:   V1.0
   | Date        :   2017-08-16
   | Info        :   Basic version
 
@@ -18,7 +18,7 @@
 
 extern LCD_DIS sLCD_DIS;
 /******************************************************************************
-  function:	Coordinate conversion
+  function: Coordinate conversion
 ******************************************************************************/
 void GUI_Swop(POINT Point1, POINT Point2)
 {
@@ -29,7 +29,7 @@ void GUI_Swop(POINT Point1, POINT Point2)
 }
 
 /******************************************************************************
-  function:	Coordinate conversion
+  function: Coordinate conversion
 ******************************************************************************/
 void GUI_Clear(COLOR Color)
 {
@@ -37,12 +37,12 @@ void GUI_Clear(COLOR Color)
 }
 
 /******************************************************************************
-  function:	Draw Point(Xpoint, Ypoint) Fill the color
+  function: Draw Point(Xpoint, Ypoint) Fill the color
   parameter:
-	Xpoint		:   The x coordinate of the point
-	Ypoint		:   The y coordinate of the point
-	Color		:   Set color
-	Dot_Pixel	:	point size
+  Xpoint    :   The x coordinate of the point
+  Ypoint    :   The y coordinate of the point
+  Color     :   Set color
+  Dot_Pixel :   point size
 ******************************************************************************/
 void GUI_DrawPoint(POINT Xpoint, POINT Ypoint, COLOR Color,
                    DOT_PIXEL Dot_Pixel, DOT_STYLE DOT_STYLE)
@@ -56,26 +56,32 @@ void GUI_DrawPoint(POINT Xpoint, POINT Ypoint, COLOR Color,
   if (DOT_STYLE == DOT_STYLE_DFT) {
     for (XDir_Num = 0; XDir_Num < 2 * Dot_Pixel - 1; XDir_Num++) {
       for (YDir_Num = 0; YDir_Num < 2 * Dot_Pixel - 1; YDir_Num++) {
-        LCD_SetPointlColor(Xpoint + XDir_Num - Dot_Pixel, Ypoint + YDir_Num - Dot_Pixel, Color);
+        //CAL! LCD_SetPointlColor(Xpoint + XDir_Num - Dot_Pixel, Ypoint + YDir_Num - Dot_Pixel, Color);
+        LCD_SetPointlColor(Xpoint + XDir_Num - Dot_Pixel + 1, Ypoint + YDir_Num - Dot_Pixel + 1, Color);
       }
     }
   } else {
     for (XDir_Num = 0; XDir_Num <  Dot_Pixel; XDir_Num++) {
       for (YDir_Num = 0; YDir_Num <  Dot_Pixel; YDir_Num++) {
-        LCD_SetPointlColor(Xpoint + XDir_Num - 1, Ypoint + YDir_Num - 1, Color);
+        //CAL! The following appears to have a bug that causes the Xpoint to be
+        //CAL! shifted by -1 and the Ypoint to be shifted by -1. The net result
+        //CAL! is that attempts to write to X=0 or Y=0 will cause an underflow,
+        //CAL! leading to a Column/Page Address out of bounds.
+        //CAL! LCD_SetPointlColor(Xpoint + XDir_Num - 1, Ypoint + YDir_Num - 1, Color);
+        LCD_SetPointlColor(Xpoint + XDir_Num, Ypoint + YDir_Num, Color);
       }
     }
   }
 }
 
 /******************************************************************************
-  function:	Draw a line of arbitrary slope
+  function: Draw a line of arbitrary slope
   parameter:
-	Xstart ：Starting x point coordinates
-	Ystart ：Starting x point coordinates
-	Xend   ：End point x coordinate
-	Yend   ：End point y coordinate
-	Color  ：The color of the line segment
+  Xstart ：Starting x point coordinates
+  Ystart ：Starting x point coordinates
+  Xend   ：End point x coordinate
+  Yend   ：End point y coordinate
+  Color  ：The color of the line segment
 ******************************************************************************/
 void GUI_DrawLine(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
                   COLOR Color, LINE_STYLE Line_Style, DOT_PIXEL Dot_Pixel)
@@ -128,14 +134,14 @@ void GUI_DrawLine(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
 }
 
 /******************************************************************************
-  function:	Draw a rectangle
+  function: Draw a rectangle
   parameter:
-	Xstart ：Rectangular  Starting x point coordinates
-	Ystart ：Rectangular  Starting x point coordinates
-	Xend   ：Rectangular  End point x coordinate
-	Yend   ：Rectangular  End point y coordinate
-	Color  ：The color of the Rectangular segment
-	Filled : Whether it is filled--- 1 solid 0：empty
+  Xstart ：Rectangular  Starting x point coordinates
+  Ystart ：Rectangular  Starting x point coordinates
+  Xend   ：Rectangular  End point x coordinate
+  Yend   ：Rectangular  End point y coordinate
+  Color  ：The color of the Rectangular segment
+  Filled : Whether it is filled--- 1 solid 0：empty
 ******************************************************************************/
 void GUI_DrawRectangle(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
                        COLOR Color, DRAW_FILL Filled, DOT_PIXEL Dot_Pixel)
@@ -153,13 +159,13 @@ void GUI_DrawRectangle(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
 
   if (Filled ) {
     #if LOW_Speed_Show
-		POINT Ypoint;
+    POINT Ypoint;
         for(Ypoint = Ystart; Ypoint < Yend; Ypoint++) {
             GUI_DrawLine(Xstart, Ypoint, Xend, Ypoint, Color , LINE_SOLID, Dot_Pixel);
         }
-	#elif HIGH_Speed_Show
-		LCD_SetArealColor( Xstart, Ystart, Xend, Yend, Color);
-	#endif
+  #elif HIGH_Speed_Show
+    LCD_SetArealColor( Xstart, Ystart, Xend, Yend, Color);
+  #endif
   } else {
     GUI_DrawLine(Xstart, Ystart, Xend, Ystart, Color , LINE_SOLID, Dot_Pixel);
     GUI_DrawLine(Xstart, Ystart, Xstart, Yend, Color , LINE_SOLID, Dot_Pixel);
@@ -169,14 +175,14 @@ void GUI_DrawRectangle(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
 }
 
 /******************************************************************************
-  function:	Use the 8-point method to draw a circle of the
-				specified size at the specified position.
+  function: Use the 8-point method to draw a circle of the
+        specified size at the specified position.
   parameter:
-	X_Center  ：Center X coordinate
-	Y_Center  ：Center Y coordinate
-	Radius    ：circle Radius
-	Color     ：The color of the ：circle segment
-	Filled    : Whether it is filled: 1 filling 0：Do not
+  X_Center  : Center X coordinate
+  Y_Center  : Center Y coordinate
+  Radius    : circle Radius
+  Color     : The color of the ：circle segment
+  Filled    : Whether it is filled: 1 filling 0：Do not
 ******************************************************************************/
 void GUI_DrawCircle(POINT X_Center, POINT Y_Center, LENGTH Radius,
                     COLOR Color, DRAW_FILL  Draw_Fill , DOT_PIXEL Dot_Pixel)
@@ -238,14 +244,14 @@ void GUI_DrawCircle(POINT X_Center, POINT Y_Center, LENGTH Radius,
 }
 
 /******************************************************************************
-  function:	Show English characters
+  function: Show English characters
   parameter:
-	Xpoint           ：X coordinate
-	Ypoint           ：Y coordinate
-	Acsii_Char       ：To display the English characters
-	Font             ：A structure pointer that displays a character size
-	Color_Background : Select the background color of the English character
-	Color_Foreground : Select the foreground color of the English character
+  Xpoint           : X coordinate
+  Ypoint           : Y coordinate
+  Acsii_Char       : To display the English characters
+  Font             : A structure pointer that displays a character size
+  Color_Background : Select the background color of the English character
+  Color_Foreground : Select the foreground color of the English character
 ******************************************************************************/
 void GUI_DisChar(POINT Xpoint, POINT Ypoint, const char Acsii_Char,
                  sFONT* Font, COLOR Color_Background, COLOR Color_Foreground)
@@ -284,14 +290,14 @@ void GUI_DisChar(POINT Xpoint, POINT Ypoint, const char Acsii_Char,
 }
 
 /******************************************************************************
-  function:	Display the string
+  function: Display the string
   parameter:
-	Xstart           ：X coordinate
-	Ystart           ：Y coordinate
-	pString          ：The first address of the English string to be displayed
-	Font             ：A structure pointer that displays a character size
-	Color_Background : Select the background color of the English character
-	Color_Foreground : Select the foreground color of the English character
+  Xstart           : X coordinate
+  Ystart           : Y coordinate
+  pString          : The first address of the English string to be displayed
+  Font             : A structure pointer that displays a character size
+  Color_Background : Select the background color of the English character
+  Color_Foreground : Select the foreground color of the English character
 ******************************************************************************/
 void GUI_DisString_EN(POINT Xstart, POINT Ystart, const char * pString,
                       sFONT* Font, COLOR Color_Background, COLOR Color_Foreground )
@@ -327,14 +333,14 @@ void GUI_DisString_EN(POINT Xstart, POINT Ystart, const char * pString,
 }
 
 /******************************************************************************
-  function:	Display the string
+  function: Display the string
   parameter:
-	Xstart           ：X coordinate
-	Ystart           : Y coordinate
-	Nummber          : The number displayed
-	Font             ：A structure pointer that displays a character size
-	Color_Background : Select the background color of the English character
-	Color_Foreground : Select the foreground color of the English character
+  Xstart           : X coordinate
+  Ystart           : Y coordinate
+  Nummber          : The number displayed
+  Font             : A structure pointer that displays a character size
+  Color_Background : Select the background color of the English character
+  Color_Foreground : Select the foreground color of the English character
 ******************************************************************************/
 #define  ARRAY_LEN 255
 void GUI_DisNum(POINT Xpoint, POINT Ypoint, int32_t Nummber,
@@ -371,15 +377,15 @@ void GUI_DisNum(POINT Xpoint, POINT Ypoint, int32_t Nummber,
 
 
 /******************************************************************************
-  function:	Display the bit map,1 byte = 8bit = 8 points
+  function: Display the bit map,1 byte = 8bit = 8 points
   parameter:
-	Xpoint ：X coordinate
-	Ypoint : Y coordinate
-	pMap   : Pointing to the picture
-	Width  ：Bitmap Width
-	Height : Bitmap Height
+  Xpoint : X coordinate
+  Ypoint : Y coordinate
+  pMap   : Pointing to the picture
+  Width  : Bitmap Width
+  Height : Bitmap Height
   note:
-	This function is suitable for bitmap, because a 16-bit data accounted for 16 points
+  This function is suitable for bitmap, because a 16-bit data accounted for 16 points
 ******************************************************************************/
 void GUI_Disbitmap(POINT Xpoint, POINT Ypoint, const unsigned char *pMap,
                    POINT Width, POINT Height)
@@ -395,16 +401,16 @@ void GUI_Disbitmap(POINT Xpoint, POINT Ypoint, const unsigned char *pMap,
 }
 
 /******************************************************************************
-  function:	Display the Gray map,1 byte = 8bit = 2 points
+  function: Display the Gray map,1 byte = 8bit = 2 points
   parameter:
-	Xpoint ：X coordinate
-	Ypoint : Y coordinate
-	pMap   : Pointing to the picture
-	Width  ：Bitmap Width
-	Height : Bitmap Height
+  Xpoint : X coordinate
+  Ypoint : Y coordinate
+  pMap   : Pointing to the picture
+  Width  : Bitmap Width
+  Height : Bitmap Height
   note:
-	This function is suitable for bitmap, because a 4-bit data accounted for 1 points
-	Please use the Image2lcd generated array
+  This function is suitable for bitmap, because a 4-bit data accounted for 1 points
+  Please use the Image2lcd generated array
 ******************************************************************************/
 void GUI_DisGrayMap(POINT Xpoint, POINT Ypoint, const unsigned char *pBmp)
 {
@@ -453,14 +459,14 @@ sFONT *GUI_GetFontSize(POINT Dx, POINT Dy)
   return Font;
 }
 /******************************************************************************
-  function:	According to the display area adaptive display time
+  function: According to the display area adaptive display time
   parameter:
-		xStart :   X direction Start coordinates
-		Ystart :   Y direction Start coordinates
-		Xend   :   X direction end coordinates
-		Yend   :   Y direction end coordinates
-		pTime  :   Pointer to the definition of the structure
-		Color  :   Set show color
+    xStart :   X direction Start coordinates
+    Ystart :   Y direction Start coordinates
+    Xend   :   X direction end coordinates
+    Yend   :   Y direction end coordinates
+    pTime  :   Pointer to the definition of the structure
+    Color  :   Set show color
   note:
 ******************************************************************************/
 
@@ -516,15 +522,15 @@ void GUI_Showtime(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
 }
 
 /******************************************************************************
-  function:	GUI_Show
+  function: GUI_Show
   note:
-	Clear,
-	Draw Line,
-	Draw Rectangle,
-	Draw Rings,
-	Draw Olympic Rings,
-	Display String,
-	Show Pic
+  Clear,
+  Draw Line,
+  Draw Rectangle,
+  Draw Rings,
+  Draw Olympic Rings,
+  Display String,
+  Show Pic
 ******************************************************************************/
 void GUI_Show(void)
 {
