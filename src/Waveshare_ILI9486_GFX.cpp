@@ -84,12 +84,12 @@ void Waveshare_ILI9486_GFX::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t
 
 void Waveshare_ILI9486_GFX::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 {
-	GUI_DrawRectangle(x, y, x + w - 1, y + h, color, DRAW_EMPTY, DOT_PIXEL_1X1);
+	GUI_DrawRectangle(x, y, x + w - 1, y + h - 1, color, DRAW_EMPTY, DOT_PIXEL_1X1);
 }
 
 void Waveshare_ILI9486_GFX::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 {
-	GUI_DrawRectangle(x, y, x + w - 1, y + h, color, DRAW_FULL, DOT_PIXEL_1X1);
+	GUI_DrawRectangle(x, y, x + w - 1, y + h - 1, color, DRAW_FULL, DOT_PIXEL_1X1);
 }
 
 void Waveshare_ILI9486_GFX::drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
