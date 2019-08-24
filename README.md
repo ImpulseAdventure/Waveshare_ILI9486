@@ -24,6 +24,8 @@ Original demo code examples:
 ## Examples
 - A ported GFX "graphicstest" example using the Waveshare_ILI9486_GFX API can be found in Examples -> ws_graphicstest_
 - Original example driver code is provided in Examples -> 3.5inch and Examples -> 4.0inch
+- A GUI can be built with the [GUIslice](https://github.com/ImpulseAdventure/GUIslice) library
+  using the following configuration: `ard-shld-waveshare_40_xpt2046`
 
 ## Authors
 
