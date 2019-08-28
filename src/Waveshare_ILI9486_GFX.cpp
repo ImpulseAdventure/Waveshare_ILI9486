@@ -1,15 +1,18 @@
+// ------------------------------------------------------------------
+// Waveshare_ILI9486: GFX style API wrapper for Waveshare_ILI9486
+// ------------------------------------------------------------------
 //
-// GFX style API wrapper for Waveshare_ILI9486
 // - https://github.com/ImpulseAdventure/Waveshare_ILI9486
 // - Intended to work with the following displays:
-//   - Waveshare 4.0" Touch Shield for Arduino
-//   - Waveshare 3.5" Touch Shield for Arduino
-//
-
+//   - Waveshare 4" Touch LCD Shield for Arduino (SKU: 13587)
+//     https://www.waveshare.com/product/modules/oleds-lcds/arduino-lcd/4inch-tft-touch-shield.htm
+//   - Waveshare 3.5" Touch LCD Shield for Arduino (SKU: 13506)
+//     https://www.waveshare.com/product/modules/oleds-lcds/arduino-lcd/3.5inch-tft-touch-shield.htm
 //
 // The Waveshare_ILI9486_GFX API is based on Adafruit-GFX.
 // The associated copyright notice is reproduced below.
 //
+
 /*
 This is the core graphics library for all our displays, providing a common
 set of graphics primitives (points, lines, circles, etc.).  It needs to be
