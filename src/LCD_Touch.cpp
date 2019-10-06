@@ -26,9 +26,9 @@ static TP_DRAW sTP_Draw;
     Channel_Cmd :   0x90: Read channel Y +, select the ADC resolution is 12 bits, set to differential mode
                     0xd0: Read channel x +, select the ADC resolution is 12 bits, set to differential mode
 *******************************************************************************/
-static unsigned int TP_Read_ADC(unsigned char CMD)
+static uint16_t TP_Read_ADC(unsigned char CMD)
 {
-  unsigned int Data = 0;
+  uint16_t Data = 0;
 
   SPI.setClockDivider(SPI_CLOCK_DIV8);
   SPI.begin();
@@ -59,11 +59,11 @@ static unsigned int TP_Read_ADC(unsigned char CMD)
 *******************************************************************************/
 #define READ_TIMES  5   //Number of readings
 #define LOST_NUM    1   //Discard value
-static unsigned int TP_Read_ADC_Average(unsigned char Channel_Cmd)
+static uint16_t TP_Read_ADC_Average(unsigned char Channel_Cmd)
 {
   unsigned char i, j;
-  unsigned int Read_Buff[READ_TIMES];
-  unsigned int Read_Sum = 0, Read_Temp = 0;
+  uint16_t Read_Buff[READ_TIMES];
+  uint16_t Read_Sum = 0, Read_Temp = 0;
 
   //Read and save multiple samples
   for (i = 0; i < READ_TIMES; i++) {
@@ -99,7 +99,7 @@ static unsigned int TP_Read_ADC_Average(unsigned char Channel_Cmd)
     Channel_Cmd :   0x90 :Read channel Y +
                     0xd0 :Read channel x +
 *******************************************************************************/
-static void TP_Read_ADC_XY(unsigned int *pXCh_Adc, unsigned int  *pYCh_Adc )
+static void TP_Read_ADC_XY(uint16_t *pXCh_Adc, uint16_t *pYCh_Adc )
 {
   *pXCh_Adc = TP_Read_ADC_Average(0xD0);
   *pYCh_Adc = TP_Read_ADC_Average(0x90);
@@ -114,9 +114,9 @@ static void TP_Read_ADC_XY(unsigned int *pXCh_Adc, unsigned int  *pYCh_Adc )
                     pXCh_Adc = 0xd0 :Read channel x +
 *******************************************************************************/
 #define ERR_RANGE 50    //tolerance scope
-static bool TP_Read_TwiceADC(unsigned int *pXCh_Adc, unsigned int  *pYCh_Adc )
+static bool TP_Read_TwiceADC(uint16_t *pXCh_Adc, uint16_t *pYCh_Adc )
 {
-  unsigned int XCh_Adc1, YCh_Adc1, XCh_Adc2, YCh_Adc2;
+  uint16_t XCh_Adc1, YCh_Adc1, XCh_Adc2, YCh_Adc2;
 
   //Read the ADC values Read the ADC values twice
   TP_Read_ADC_XY(&XCh_Adc1, &YCh_Adc1);
@@ -278,9 +278,9 @@ static void TP_ShowInfo(POINT Xpoint0, POINT Ypoint0,
 void TP_Adjust(void)
 {
   unsigned char  cnt = 0;
-  unsigned int XYpoint_Arr[4][2];
+  uint16_t XYpoint_Arr[4][2];
   uint32_t Dx, Dy;
-  unsigned int Sqrt1, Sqrt2;
+  uint32_t Sqrt1, Sqrt2;
   float Dsqrt;
 
   LCD_Clear(LCD_BACKGROUND);
