@@ -92,13 +92,11 @@ void setup() {
 
 
 void loop(void) {
-#if 0  
 	for (uint8_t rotation = 0; rotation < 4; rotation++) {
 		tft.setRotation(rotation);
 		testText();
 		delay(1000);
 	}
-#endif  
 }
 
 unsigned long testFillScreen() {

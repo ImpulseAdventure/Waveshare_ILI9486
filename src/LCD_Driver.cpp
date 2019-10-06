@@ -198,36 +198,36 @@ void LCD_SetGramScanWay(LCD_SCAN_DIR Scan_dir)
 
     // Gets the scan direction of GRAM
     switch (Scan_dir) {
-    case L2R_U2D:
-        MemoryAccessReg_Data = 0x08;//0x08 | 0X8
-        DisFunReg_Data = 0x22;
+    case L2R_U2D:                       // Rotation=        0
+        MemoryAccessReg_Data = 0x08;    // MADCTL:          BGR
+        DisFunReg_Data = 0x22;          // DISPFUNCCTL:     ISC='b0010, SM=0, SS=1, GS=0
         break;
     case L2R_D2U:
-        MemoryAccessReg_Data = 0x08;
+        MemoryAccessReg_Data = 0x08;    // MADCTL:          BGR
         DisFunReg_Data = 0x62;
         break;
     case R2L_U2D: //0X4
-        MemoryAccessReg_Data = 0x08;
+        MemoryAccessReg_Data = 0x08;    // MADCTL:          BGR
         DisFunReg_Data = 0x02;
         break;
-    case R2L_D2U: //0XC
-        MemoryAccessReg_Data = 0x08;
-        DisFunReg_Data = 0x42;
+    case R2L_D2U: //0XC                 // Rotation=        2
+        MemoryAccessReg_Data = 0x08;    // MADCTL:          BGR
+        DisFunReg_Data = 0x42;          // DISPFUNCCTL:     ISC='b0010, SM=0, SS=0, GS=1
         break;
     case U2D_L2R: //0X2
-        MemoryAccessReg_Data = 0x28;
+        MemoryAccessReg_Data = 0x28;    // MADCTL:          BGR, MV
         DisFunReg_Data = 0x22;
         break;
-    case U2D_R2L: //0X6
-        MemoryAccessReg_Data = 0x28;
-        DisFunReg_Data = 0x02;
+    case U2D_R2L: //0X6                 // Rotation=        1
+        MemoryAccessReg_Data = 0x28;    // MADCTL:          BGR, MV
+        DisFunReg_Data = 0x02;          // DISPFUNCCTL:     ISC='b0010, SM=0, SS=0, GS=0
         break;
-    case D2U_L2R: //0XA
-        MemoryAccessReg_Data = 0x28;
-        DisFunReg_Data = 0x62;
+    case D2U_L2R: //0XA                 // Rotation=        3
+        MemoryAccessReg_Data = 0x28;    // MADCTL:          BGR, MV
+        DisFunReg_Data = 0x62;          // DISPFUNCCTRL:    ISC='b0010, SM=0, SS=1, GS=1
         break;
     case D2U_R2L: //0XE
-        MemoryAccessReg_Data = 0x28;
+        MemoryAccessReg_Data = 0x28;    // MADCTL: BGR | MV
         DisFunReg_Data = 0x42;
         break;
     }

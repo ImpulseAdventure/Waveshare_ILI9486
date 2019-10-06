@@ -51,7 +51,7 @@ Waveshare_ILI9486_GFX::Waveshare_ILI9486_GFX(void)
 	HEIGHT = LCD_HEIGHT;
 	_width = WIDTH;
 	_height = HEIGHT;
-	_rotation = 0;
+	_rotation = 0; // Portrait
 
 	_cursor_x = 0;
 	_cursor_y = 0;
@@ -69,9 +69,7 @@ void Waveshare_ILI9486_GFX::begin()
 {
 	System_Init();
 
-	LCD_SCAN_DIR Lcd_ScanDir = SCAN_DIR_DFT;
-	LCD_Init(Lcd_ScanDir, 100);
-
+	setRotation(_rotation);
 }
 
 void Waveshare_ILI9486_GFX::drawPixel(int16_t x, int16_t y, uint16_t color)
@@ -308,25 +306,43 @@ void Waveshare_ILI9486_GFX::getTextBounds(const char *str, int16_t x, int16_t y,
 	}
 }
 
-// Placeholder stub functions - not implemented
-
 void Waveshare_ILI9486_GFX::setRotation(uint8_t r)
 {
-	// NOTE: Rotation functionality not supported in Waveshare lib
+	LCD_SCAN_DIR Lcd_ScanDir = L2R_U2D;
 	_rotation = (r & 3);
+
+	// Note that Waveshare original library display dimensions and
+	// rotation defaults to a landscape orientation. Remapped here
+	// for consistency with other libraries.
+
 	switch (_rotation) {
-	case 0:
-	case 2:
-		_width = LCD_WIDTH;
-		_height = LCD_HEIGHT;
-		break;
-	case 1:
-	case 3:
+	case 0: //1:
+		Lcd_ScanDir = L2R_U2D;
 		_width = LCD_HEIGHT;
 		_height = LCD_WIDTH;
 		break;
+	case 1: //2:
+		Lcd_ScanDir = U2D_R2L;
+		_width = LCD_WIDTH;
+		_height = LCD_HEIGHT;
+		break;
+	case 2: //3:
+		Lcd_ScanDir = R2L_D2U;
+		_width = LCD_HEIGHT;
+		_height = LCD_WIDTH;
+		break;
+	case 3: //0:
+		Lcd_ScanDir = D2U_L2R;
+		_width = LCD_WIDTH;
+		_height = LCD_HEIGHT;
+		break;
 	}
+
+	LCD_Init(Lcd_ScanDir, 100);
+
 }
+
+// Placeholder stub functions - not implemented
 
 // ----------------------------------------------------------------------------
 
