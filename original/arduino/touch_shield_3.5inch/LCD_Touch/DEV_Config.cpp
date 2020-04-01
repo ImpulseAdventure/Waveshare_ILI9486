@@ -25,10 +25,10 @@ uint8_t System_Init(void)
 
   Serial.begin(115200);
   
+  SPI.begin();
   SPI.setDataMode(SPI_MODE0);
   SPI.setBitOrder(MSBFIRST);
   SPI.setClockDivider(SPI_CLOCK_DIV2);
-  SPI.begin();
 
   return 0;
 }
