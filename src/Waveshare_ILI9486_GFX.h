@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "Fonts/fonts.h"
 
 // Library version
-#define WAVESHARE_ILI9486_VER "0.3.0"
+#define WAVESHARE_ILI9486_VER "0.4.0"
 
 class Waveshare_ILI9486_GFX : public Print {
 protected:
