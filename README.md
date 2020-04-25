@@ -34,7 +34,7 @@ Under examples there is:
  later using `setTsConfigData()`.
 
  This library can be installed manually, or it is available from the Arduino IDE Library Manager.
- Search for "waveshare4inch" in the Library Manager.
+ Search for "Waveshare ILI9486" in the Library Manager.
 
 ## References
 
@@ -45,7 +45,7 @@ Wiki support pages:
 ## Authors
 
 * **Waveshare team** - *Original driver code* - [Waveshare](https://www.waveshare.com/)
-* **ImpulseAdventure** - *Arduino library adaptation* - [ImpulseAdventure](https://github.com/ImpulseAdventure/)
+* **Calvin Hass** - *Arduino library adaptation* - [ImpulseAdventure](https://github.com/ImpulseAdventure/)
 * **M Hotchin** - *Updated Arduino library*
 
 ## License
