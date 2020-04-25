@@ -466,7 +466,7 @@ namespace Waveshare_ILI9486_Impl
 			break;
 
 		case 0x01:
-			MemoryAccessControl_0x36 = 0xA8;
+			MemoryAccessControl_0x36 = 0x68;
 			break;
 
 		case 0x02:
@@ -474,7 +474,7 @@ namespace Waveshare_ILI9486_Impl
 			break;
 
 		case 0x03:
-			MemoryAccessControl_0x36 = 0x68;
+			MemoryAccessControl_0x36 = 0xA8;
 			break;
 		}
 
