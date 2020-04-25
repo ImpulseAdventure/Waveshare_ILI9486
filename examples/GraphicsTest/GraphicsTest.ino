@@ -1,15 +1,9 @@
-/*
- Name:		Waveshare_4_inch_Touchscreen.ino
- Created:	2019-12-18 7:04:17 PM
- Author:	Michael
-*/
-
 #include <Arduino.h>
 
 #include <SPI.h>
 
 #include <Adafruit_GFX.h>
-#include <Waveshare4InchTftShield.h>
+#include <Waveshare_ILI9486.h>
 
 
 // Assign human-readable names to some common 16-bit color values:
@@ -25,7 +19,7 @@
 
 namespace
 {
-	Waveshare4InchTftShield Waveshield;
+	Waveshare_ILI9486 Waveshield;
 
 	//  Provide an alias so I don't have to search-and-replace all the code below.
 	Adafruit_GFX &tft = Waveshield;

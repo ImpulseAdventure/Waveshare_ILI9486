@@ -1,9 +1,3 @@
-/*
- Name:		TouchTest.ino
- Created:	2019-12-25 12:52:14 AM
- Author:	Michael
-*/
-
 // the setup function runs once when you press reset or power the board
 
 #include <Arduino.h>
@@ -11,7 +5,7 @@
 #include <SPI.h>
 
 #include <Adafruit_GFX.h>
-#include <Waveshare4InchTftShield.h>
+#include <Waveshare_ILI9486.h>
 
 // Assign human-readable names to some common 16-bit color values:
 #define	BLACK   0x0000
@@ -25,7 +19,7 @@
 
 namespace
 {
-    Waveshare4InchTftShield Waveshield;
+    Waveshare_ILI9486 Waveshield;
 }
 
 void setup() 

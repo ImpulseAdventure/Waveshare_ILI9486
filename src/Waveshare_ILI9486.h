@@ -1,10 +1,7 @@
-//  Copyright 2019 M Hotchin.
-//
-//  New class for the Waveshare 4 inch TFT touchscreen with SD card support.
-//  Waveshare SKU 13587.
-//  https://www.waveshare.com/product/modules/oleds-lcds/arduino-lcd/4inch-tft-touch-shield.htm
-//
-//  Likely also works with 3.5" touchscreen, Waveshare SKU 13506
+//  Waveshare ILI9486
+//  - Class for Waveshare TFT touchscreens + SD card support:
+//    - Waveshare 4" Touch LCD Shield for Arduino (SKU: 13587)
+//    - Waveshare 3.5" Touch LCD Shield for Arduino (SKU: 13506)
 //  
 //  Based off the demo code available at:
 //  https://www.waveshare.com/wiki/4inch_TFT_Touch_Shield
@@ -25,9 +22,30 @@
 //        -- co-ordinate normalization - converts raw touchscreen values into co-ordinates 
 //           matching the current screen rotation.
 //
+// The MIT License
+//
+// Copyright 2019-2020 M Hotchin
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
-#ifndef _WAVESHARE_4_INCH_TFT_SHIELD_h
-#define _WAVESHARE_4_INCH_TFT_SHIELD_h
+#ifndef _WAVESHARE_ILI9486_h
+#define _WAVESHARE_ILI9486_h
 
 //  Touchscreen code ported from Adafruit 'Touchscreen' library.
 // https://github.com/adafruit/Adafruit_TouchScreen
@@ -90,7 +108,7 @@ public:
 
 
 //  Straight hardware access.
-namespace Waveshare4InchTftShieldImpl
+namespace Waveshare_ILI9486_Impl
 {
 	void initializePins();
 
@@ -112,10 +130,10 @@ namespace Waveshare4InchTftShieldImpl
 };
 
 template<class Baseclass>
-class Waveshare4InchTftShieldTemplate : public Baseclass, public WaveshareTouchScreen
+class Waveshare_ILI9486_Template : public Baseclass, public WaveshareTouchScreen
 {
 public:
-	Waveshare4InchTftShieldTemplate();
+	Waveshare_ILI9486_Template();
 
 	//  Defaults to full brightness
 	bool begin();
@@ -172,31 +190,31 @@ public:
 //  The default implementation builds upon the Adafruit_GFX class.  If you have an
 //  'enhanced' GFX classed derived from Adafruit_GFX, you can use that as the template
 //  paramenter instead, and have access to all your enhancements.
-typedef Waveshare4InchTftShieldTemplate<Adafruit_GFX> Waveshare4InchTftShield;
+typedef Waveshare_ILI9486_Template<Adafruit_GFX> Waveshare_ILI9486;
 
 
 ////  Template implementation follows
 template<class Baseclass>
-Waveshare4InchTftShieldTemplate<Baseclass>::Waveshare4InchTftShieldTemplate()
+Waveshare_ILI9486_Template<Baseclass>::Waveshare_ILI9486_Template()
 	:Baseclass(LCD_WIDTH, LCD_HEIGHT)
 {
-	Waveshare4InchTftShieldImpl::initializePins();
+	Waveshare_ILI9486_Impl::initializePins();
 }
 
 template<class Baseclass>
 bool
-Waveshare4InchTftShieldTemplate<Baseclass>::begin()
+Waveshare_ILI9486_Template<Baseclass>::begin()
 {
 	return begin(0xff);
 }
 
 template<class Baseclass>
 bool
-Waveshare4InchTftShieldTemplate<Baseclass>::begin(uint8_t brightness)
+Waveshare_ILI9486_Template<Baseclass>::begin(uint8_t brightness)
 {
-	Waveshare4InchTftShieldImpl::initializePins();
+	Waveshare_ILI9486_Impl::initializePins();
 
-	Waveshare4InchTftShieldImpl::initializeLcd();
+	Waveshare_ILI9486_Impl::initializeLcd();
 	setRotation(0);
 	setScreenBrightness(brightness);
 	return true;
@@ -205,15 +223,15 @@ Waveshare4InchTftShieldTemplate<Baseclass>::begin(uint8_t brightness)
 
 template<class Baseclass>
 uint8_t
-Waveshare4InchTftShieldTemplate<Baseclass>::GetSdCardCS()
+Waveshare_ILI9486_Template<Baseclass>::GetSdCardCS()
 {
-	return Waveshare4InchTftShieldImpl::GetSdCardCS();
+	return Waveshare_ILI9486_Impl::GetSdCardCS();
 }
 
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::drawPixel(
+Waveshare_ILI9486_Template<Baseclass>::drawPixel(
 	int16_t x, int16_t y, uint16_t color)
 {
 	startWrite();
@@ -226,14 +244,14 @@ Waveshare4InchTftShieldTemplate<Baseclass>::drawPixel(
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::startWrite()
+Waveshare_ILI9486_Template<Baseclass>::startWrite()
 {
-	Waveshare4InchTftShieldImpl::startWrite();
+	Waveshare_ILI9486_Impl::startWrite();
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::writePixel(
+Waveshare_ILI9486_Template<Baseclass>::writePixel(
 	int16_t x, int16_t y, uint16_t color)
 {
 	if (x < 0) return;
@@ -242,14 +260,14 @@ Waveshare4InchTftShieldTemplate<Baseclass>::writePixel(
 	if (x >= Baseclass::width()) return;
 	if (y >= Baseclass::height()) return;
 
-	Waveshare4InchTftShieldImpl::writeFillRect2(x, y, 1, 1, color);
+	Waveshare_ILI9486_Impl::writeFillRect2(x, y, 1, 1, color);
 }
 
 void TestSkip();
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::writeFillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::writeFillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 {
 	//  Negative widths, so swap left and right sides
 	if (w < 0)
@@ -297,49 +315,49 @@ Waveshare4InchTftShieldTemplate<Baseclass>::writeFillRect(int16_t x, int16_t y, 
 
 	// Now, 0 <= x <= x+w <= WIDTH
 	// And, 0 <= y <= y+h <= HEIGHT
-	Waveshare4InchTftShieldImpl::writeFillRect2(x, y, w, h, color);
+	Waveshare_ILI9486_Impl::writeFillRect2(x, y, w, h, color);
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::writeFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::writeFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
 {
 	writeFillRect(x, y, 1, h, color);
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 {
 	writeFillRect(x, y, w, 1, color);
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::endWrite()
+Waveshare_ILI9486_Template<Baseclass>::endWrite()
 {
-	Waveshare4InchTftShieldImpl::endWrite();
+	Waveshare_ILI9486_Impl::endWrite();
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::setRotation(uint8_t r)
+Waveshare_ILI9486_Template<Baseclass>::setRotation(uint8_t r)
 {
-	Waveshare4InchTftShieldImpl::setRotation(r);
+	Waveshare_ILI9486_Impl::setRotation(r);
 	//  Don't forget to tell the base class!
 	Baseclass::setRotation(r);
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::invertDisplay(boolean i)
+Waveshare_ILI9486_Template<Baseclass>::invertDisplay(boolean i)
 {
-	Waveshare4InchTftShieldImpl::invertDisplay(i);
+	Waveshare_ILI9486_Impl::invertDisplay(i);
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
 {
 	startWrite();
 	writeFillRect(x, y, 1, h, color);
@@ -348,7 +366,7 @@ Waveshare4InchTftShieldTemplate<Baseclass>::drawFastVLine(int16_t x, int16_t y, 
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 {
 	startWrite();
 	writeFillRect(x, y, w, 1, color);
@@ -358,7 +376,7 @@ Waveshare4InchTftShieldTemplate<Baseclass>::drawFastHLine(int16_t x, int16_t y, 
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 {
 	startWrite();
 	writeFillRect(x, y, w, h, color);
@@ -368,42 +386,42 @@ Waveshare4InchTftShieldTemplate<Baseclass>::fillRect(int16_t x, int16_t y, int16
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::fillScreen(uint16_t color)
+Waveshare_ILI9486_Template<Baseclass>::fillScreen(uint16_t color)
 {
 	startWrite();
-	Waveshare4InchTftShieldImpl::writeFillRect2(0, 0, Baseclass::width(), Baseclass::height(), color);
+	Waveshare_ILI9486_Impl::writeFillRect2(0, 0, Baseclass::width(), Baseclass::height(), color);
 	endWrite();
 }
 
 //  Non Adafruit_GFX APIs.
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::drawColors(
+Waveshare_ILI9486_Template<Baseclass>::drawColors(
 	int16_t x, int16_t y, int16_t w, int16_t h, uint16_t *pColors)
 {
 	startWrite();
-	Waveshare4InchTftShieldImpl::writeColors(x, y, w, h, pColors);
+	Waveshare_ILI9486_Impl::writeColors(x, y, w, h, pColors);
 	endWrite();
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::setScreenBrightness(uint8_t brightness)
+Waveshare_ILI9486_Template<Baseclass>::setScreenBrightness(uint8_t brightness)
 {
-	Waveshare4InchTftShieldImpl::setScreenBrightness(brightness);
+	Waveshare_ILI9486_Impl::setScreenBrightness(brightness);
 }
 
 template<class Baseclass>
 void
-Waveshare4InchTftShieldTemplate<Baseclass>::setIdleMode(bool idle)
+Waveshare_ILI9486_Template<Baseclass>::setIdleMode(bool idle)
 {
-	Waveshare4InchTftShieldImpl::setIdleMode(idle);
+	Waveshare_ILI9486_Impl::setIdleMode(idle);
 }
 
 
 template<class Baseclass>
 bool
-Waveshare4InchTftShieldTemplate<Baseclass>::normalizeTsPoint(TSPoint &p)
+Waveshare_ILI9486_Template<Baseclass>::normalizeTsPoint(TSPoint &p)
 {
 	return WaveshareTouchScreen::normalizeTsPoint(p, Baseclass::rotation);
 }
