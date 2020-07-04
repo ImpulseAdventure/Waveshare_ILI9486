@@ -795,7 +795,7 @@ WaveshareTouchScreen::normalizeTsPoint(
 
 	case 1:
 		swap(p.x, p.y);
-		p.x = LCD_HEIGHT - 1 - p.x;
+		p.y = LCD_WIDTH - 1 - p.y;
 		break;
 
 	case 2:
@@ -805,8 +805,9 @@ WaveshareTouchScreen::normalizeTsPoint(
 
 	case 3:
 		swap(p.x, p.y);
-		p.y = LCD_WIDTH - 1 - p.y;
+		p.x = LCD_HEIGHT - 1 - p.x;
 		break;
+
 	}
 
 	return fReturn;
