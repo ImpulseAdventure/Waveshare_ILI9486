@@ -37,3 +37,6 @@
 *.vcxproj.filters
 *.vcxproj.user
 
+/.vs/**
+
+*.vcxitems
