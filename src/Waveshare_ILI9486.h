@@ -155,6 +155,9 @@ public:
 	virtual void writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
 	virtual void endWrite(void);
 
+	virtual void drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int16_t w,
+		int16_t h);
+
 	virtual void setRotation(uint8_t r);
 	virtual void invertDisplay(boolean i);
 
@@ -338,6 +341,18 @@ Waveshare_ILI9486_Template<Baseclass>::endWrite()
 {
 	Waveshare_ILI9486_Impl::endWrite();
 }
+
+
+template<class Baseclass>
+void
+Waveshare_ILI9486_Template<Baseclass>::drawRGBBitmap(
+	int16_t x, int16_t y,
+	uint16_t *bitmap,
+	int16_t w, int16_t h)
+{
+	drawColors(x, y, w, h, bitmap);
+}
+
 
 template<class Baseclass>
 void
