@@ -92,9 +92,11 @@ namespace
 	//  Data sheets says min clock width is 66ns, for a max clock of 15 MHz.  Except, this
 //  thing isn't *actually* SPI!  It's a 16 bit shift register connected to the parallel
 //  interface, and that can run at 20 Mhz
-	SPISettings _tftSpiSettingsWrite(20000000, MSBFIRST, SPI_MODE0);
+	// Grok wants slower //SPISettings _tftSpiSettingsWrite(20000000, MSBFIRST, SPI_MODE0);
+        //SPISettings _tftSpiSettingsWrite(15000000, MSBFIRST, SPI_MODE0);   // 15 MHz
+        SPISettings _tftSpiSettingsWrite(8000000, MSBFIRST, SPI_MODE0);   // ← changed from 15 MHz to 8 MHz	
 
-	//  TFT reads are slower, 150 ns period.
+        //  TFT reads are slower, 150 ns period.
 	//  Nevermind, Waveshare shield doesn't support reads at all!
 	//SPISettings _tftSpiSettingsRead(6500000, MSBFIRST, SPI_MODE0);
 
@@ -442,7 +444,7 @@ namespace Waveshare_ILI9486_Impl
 			lcdWriteReg(0x11); // Sleep out
 
 			//  Fill screen to black
-			writeFillRect2(0, 0, LCD_WIDTH, LCD_HEIGHT, 0x0000);
+			//Grok Comment out requested //writeFillRect2(0, 0, LCD_WIDTH, LCD_HEIGHT, 0x0000);
 
 			lcdWriteReg(0x29);  // Turn on display
 		}

@@ -1,65 +1,121 @@
-// the setup function runs once when you press reset or power the board
+// ================================================
+//  Clean Touch Test for Waveshare 4" ILI9486 on TTgo D1 R32
+//  Backlight + SPI fixed + Persistent Calibration
+// ================================================
 
 #include <Arduino.h>
-
 #include <SPI.h>
-
 #include <Adafruit_GFX.h>
 #include <Waveshare_ILI9486.h>
+#include <Preferences.h>
 
-// Assign human-readable names to some common 16-bit color values:
-#define	BLACK   0x0000
-#define	BLUE    0x001F
-#define	RED     0xF800
-#define	GREEN   0x07E0
+// Colors
+#define BLACK   0x0000
+#define BLUE    0x001F
+#define RED     0xF800
+#define GREEN   0x07E0
 #define CYAN    0x07FF
 #define MAGENTA 0xF81F
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-namespace
-{
-    Waveshare_ILI9486 Waveshield;
-}
+Waveshare_ILI9486 Waveshield;
+Adafruit_GFX &tft = Waveshield;
+Preferences prefs;
 
-void setup() 
+const int BACKLIGHT_PIN = 13;
+
+void setup()
 {
+    Serial.begin(115200);
+    delay(2000);
+    Serial.println("\n\n=== WAVESHARE 4\" TOUCH TEST - CLEAN VERSION ===");
+
+    // Your proven display setup
     SPI.begin();
+    SPI.setFrequency(8000000);
+    Serial.println("✓ SPI 8 MHz");
+
     Waveshield.begin();
+    Serial.println("✓ Display initialized");
 
-    Waveshield.setRotation(1);
-    Waveshield.setTextSize(2);
-    Waveshield.print("Run stylus off each edge to calibrate!");
+    pinMode(BACKLIGHT_PIN, OUTPUT);
+    digitalWrite(BACKLIGHT_PIN, HIGH);
+    Serial.println("✓ Backlight ON");
 
-    Waveshield.setRotation(0);
+    tft.setRotation(1);                 // Change to 0, 2 or 3 if orientation wrong
+
+    // Load saved calibration
+    prefs.begin("touchcal", false);
+    TSConfigData savedConfig;
+    if (prefs.getBytes("calib", &savedConfig, sizeof(TSConfigData)) == sizeof(TSConfigData)) {
+        Waveshield.setTsConfigData(savedConfig);
+        Serial.println("✅ Calibration LOADED");
+    } else {
+        Serial.println("No calibration saved yet");
+    }
+
+    // Check for force recalibration (hold BOOT button while resetting)
+    pinMode(0, INPUT_PULLUP);
+    bool forceCal = (digitalRead(0) == LOW);
+
+    tft.fillScreen(BLACK);
+    tft.setTextSize(2);
+    tft.setTextColor(WHITE);
+
+    if (forceCal) {
+        tft.setCursor(25, 70);
+        tft.println("CALIBRATING...");
+        tft.setTextSize(1);
+        tft.setCursor(20, 120);
+        tft.println("Run stylus FIRMLY off ALL 4 edges");
+        tft.setCursor(20, 150);
+        tft.println("several times until drawing is accurate");
+        Serial.println("Force calibration started");
+        delay(3000);
+    } else {
+        tft.setCursor(30, 80);
+        tft.println("Touch Ready");
+        tft.setTextSize(1);
+        tft.setCursor(20, 130);
+        tft.println("Draw with stylus");
+        tft.setCursor(20, 160);
+        tft.println("Hold BOOT + Reset to recalibrate");
+        delay(3000);
+    }
+
+    tft.fillScreen(BLACK);
+    Serial.println("Ready - Start drawing!");
 }
 
-int i = 0;
+uint32_t lastDraw = 0;
+bool calibratedThisRun = false;
 
-// the loop function runs over and over again until power down or reset
 void loop()
 {
-    //  Get raw touchscreen values.
     TSPoint p = Waveshield.getPoint();
 
-    //  Remaps raw touchscreen values to screen co-ordinates.  Automatically handles
-    //  rotation!
-    Waveshield.normalizeTsPoint(p);
+    if (p.z > 80) {                                 // Firm press required for resistive touch
+        Waveshield.normalizeTsPoint(p);
 
-    //  Now that we have a point in screen co-ordinates, draw something there.
-    Waveshield.fillCircle(p.x, p.y, 3, BLUE);
+        if (millis() - lastDraw > 8) {
+            tft.fillCircle(p.x, p.y, 4, BLUE);
+            lastDraw = millis();
+        }
 
-    // After ten seconds, start re-drawing the background.  Draw one line each time
-    // through the loop, in a variety of colors.
-    if (millis() / 1000 > 10)
-    {
-        uint16_t color = i << 7 ^ i;
-        Waveshield.drawFastHLine(0, i, Waveshield.width() - 1, color);
+        // Auto-save calibration after some use
+        if (!calibratedThisRun && millis() > 7000) {
+            TSConfigData current = Waveshield.getTsConfigData();
+            prefs.putBytes("calib", &current, sizeof(TSConfigData));
+            Serial.println("💾 Calibration SAVED");
+            calibratedThisRun = true;
 
-        i++;
-        if (i >= Waveshield.height())
-        {
-            i = 0;
+            tft.setCursor(10, 8);
+            tft.setTextColor(GREEN, BLACK);
+            tft.setTextSize(1);
+            tft.print("Calibration Saved ✓");
         }
     }
+
+    delay(1);
 }

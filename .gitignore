@@ -41,3 +41,4 @@
 
 *.vcxitems
 /Waveshare_ILI9486-2.0.1.vcxitems.user
+.aider*
